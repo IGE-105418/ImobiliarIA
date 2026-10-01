@@ -6,7 +6,11 @@ Destinado a investidores e particulares que querem perceber o potencial de um im
 
 ## Estado
 
-v0.1: motor financeiro (venda, arrendamento, AL) exposto por uma API FastAPI.
+v0.2: motor financeiro exposto por uma API FastAPI (`POST /analise`).
+
+- Seis estratégias: vender já, arrendar, Alojamento Local, remodelar e vender, remodelar e arrendar, manter.
+- Crédito habitação (sistema francês, Imposto do Selo, seguros) e projeção de fluxos a N anos com TIR, VAL, cash-on-cash e DSCR.
+- Simulação de Monte Carlo: distribuição da TIR e do VAL, probabilidade de prejuízo e peso de cada variável no resultado.
 
 ## Correr localmente
 
@@ -19,11 +23,10 @@ pytest
 
 ## Roteiro
 
-1. Motor financeiro: remodelar e vender, remodelar e arrendar, manter; fluxos a N anos com financiamento (TIR, VAL, cash-on-cash).
-2. Análise de risco: sensibilidade e Monte Carlo.
-3. Modelo de dados em PostgreSQL + PostGIS.
-4. Dados: INE, Banco de Portugal, Turismo de Portugal, OpenStreetMap.
-5. Agente LLM com ferramentas sobre o motor.
-6. Interface web e relatório.
+1. Sazonalidade mensal no AL e regras fiscais por regime.
+2. Modelo de dados em PostgreSQL + PostGIS.
+3. Dados: INE, Banco de Portugal, Turismo de Portugal, OpenStreetMap.
+4. Agente LLM com ferramentas sobre o motor.
+5. Interface web e relatório.
 
 > Os valores por defeito são pressupostos ilustrativos e configuráveis. Não constituem aconselhamento financeiro, fiscal ou jurídico.

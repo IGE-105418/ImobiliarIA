@@ -183,19 +183,24 @@ class ResultadoManter(BaseModel):
     cenarios: dict[str, CenarioManter]
 
 
-def tir(fluxos: list[float]) -> float | None:
+def van(fluxos: list[float], taxa: float) -> float:
+    """Valor atual liquido dos fluxos anuais (fluxos[0] no ano 0)."""
+    return sum(f / (1 + taxa) ** t for t, f in enumerate(fluxos))
+
+
+def tir(fluxos: list[float], iteracoes: int = 80) -> float | None:
     """Taxa interna de rentabilidade anual por bissecao; None se nao existir."""
-    def van(r: float) -> float:
-        return sum(f / (1 + r) ** t for t, f in enumerate(fluxos))
     lo, hi = -0.99, 1.0
-    if van(lo) * van(hi) > 0:
+    v_lo, v_hi = van(fluxos, lo), van(fluxos, hi)
+    if v_lo * v_hi > 0:
         return None
-    for _ in range(200):
+    for _ in range(iteracoes):
         mid = (lo + hi) / 2
-        if van(lo) * van(mid) <= 0:
+        v_mid = van(fluxos, mid)
+        if v_lo * v_mid <= 0:
             hi = mid
         else:
-            lo = mid
+            lo, v_lo = mid, v_mid
     return (lo + hi) / 2
 
 

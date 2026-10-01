@@ -38,3 +38,21 @@ def test_analise_com_obras_e_valorizacao():
     corpo = resp.json()
     for chave in ("remodelar_vender", "remodelar_arrendar", "manter"):
         assert corpo[chave] is not None
+
+
+def test_analise_com_credito_e_monte_carlo():
+    resp = client.post("/analise", json={
+        "imovel": {"localizacao": "Lisboa, Arroios", "area_m2": 95, "tipologia": "T2",
+                   "preco_aquisicao": 250000, "capital_obras": 35000, "vpt": 120000},
+        "venda": {"preco_venda_m2": 2800},
+        "arrendamento": {"renda_mensal": 1200},
+        "alojamento_local": {"adr": 110},
+        "financiamento": {"ltv": 0.8, "taxa_juro_anual": 0.035},
+        "projecao": {"anos": 10},
+        "monte_carlo": {"simulacoes": 200, "semente": 7},
+    })
+    assert resp.status_code == 200
+    corpo = resp.json()
+    assert set(corpo["projecao"]) == {"arrendamento", "alojamento_local"}
+    assert len(corpo["projecao"]["arrendamento"]["anos"]) == 10
+    assert corpo["risco"]["alojamento_local"]["simulacoes"] == 200
